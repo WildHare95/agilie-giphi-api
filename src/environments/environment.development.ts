@@ -5,6 +5,8 @@ export const environment = {
     gifs: 'gifs'
   },
   endpoints: {
-    trending: 'trending'
+    trending: 'trending',
+    autocomplete: 'search/tags',
+    search: 'search'
   },
 };

@@ -1,0 +1,34 @@
+<form class="search__container" (submit)="submit($event)">
+  <mat-form-field class="search" appearance="fill">
+    <mat-label>Enter</mat-label>
+    <input type="text"
+           placeholder="Pick one"
+           aria-label="Search"
+           matInput
+           [formControl]="searchControl"
+           [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectOption($event)">
+      <mat-option *ngFor="let option of filteredOpt | async" [value]="option.name">
+        {{option.name}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <div class="search__controls">
+    <button
+      mat-raised-button
+      type="submit"
+      color="primary"
+    >Search</button>
+    <ng-container *ngIf="!!giphyService.search$.getValue() || searchControl.value">
+      <button
+        (click)="resetSearch()"
+        mat-raised-button
+        type="button"
+        color="accent">Reset</button>
+    </ng-container>
+  </div>
+</form>
+
+
+

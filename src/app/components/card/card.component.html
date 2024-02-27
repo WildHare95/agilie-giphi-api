@@ -1,0 +1,23 @@
+<ng-container *ngIf="!isLoading; else loader">
+  <mat-card class="card__container">
+    <mat-card-header class="card__header">
+      <mat-card-title>{{cardInfo.title}}</mat-card-title>
+      <mat-card-subtitle *ngIf="cardInfo.username">{{cardInfo.username}}</mat-card-subtitle>
+    </mat-card-header>
+    <div class="image-container">
+      <img mat-card-image class="card__image" [src]="cardInfo.srcImg">
+    </div>
+    <mat-card-content>
+      <p class="card__date">
+        {{cardInfo.postDate}}
+      </p>
+    </mat-card-content>
+  </mat-card>
+</ng-container>
+
+<ng-template #loader>
+  <div class="card__loader">
+    <mat-spinner color="warn"></mat-spinner>
+  </div>
+</ng-template>
+

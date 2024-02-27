@@ -1,0 +1,32 @@
+.search {
+  width: 100%;
+  max-width: 400px;
+
+  &__container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+  }
+
+  &__controls {
+    display: flex;
+    justify-content: flex-start;
+    gap: 5px;
+    padding-bottom: 22px;
+    width: 162px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .search {
+    padding: 7px;
+    &__container {
+      flex-direction: column;
+    }
+
+    &__controls {
+      justify-content: center;
+    }
+  }
+}

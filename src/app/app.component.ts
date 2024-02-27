@@ -2,10 +2,11 @@ import {AfterViewInit, ChangeDetectionStrategy, Component, ViewChild } from '@an
 import { GiphyService } from "./services/giphy.service";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { combineLatest, Observable, of, switchMap, tap } from "rxjs";
-import { IGifsResponse } from "./models/models";
+import {IGifsResponse, PaginatorEnum } from "./models/models";
 import { PaginatorService } from "./services/paginator.service";
 import { MatDialog } from "@angular/material/dialog";
 import { NoResultsDialogComponent } from "./components/no-results-dialog/no-results-dialog.component";
+import { MatTabGroup } from "@angular/material/tabs";
 
 
 @Component({
@@ -18,9 +19,14 @@ export class AppComponent implements AfterViewInit {
   public isLoading = false
   public isLoadingSearch = false
 
+  public paginationOption = PaginatorEnum
+
   public trendingResults: Observable<IGifsResponse[]>
   public searchResults: Observable<IGifsResponse[] | null>
-  @ViewChild(MatPaginator) paginator?: MatPaginator;
+
+  @ViewChild('paginatorTrending') paginatorTrending!: MatPaginator;
+  @ViewChild('paginatorSearch') paginatorSearch!: MatPaginator;
+  @ViewChild("tabGroup", { static: false }) tabGroup!: MatTabGroup;
 
   constructor(
     public giphyService: GiphyService,
@@ -28,7 +34,7 @@ export class AppComponent implements AfterViewInit {
     public dialog: MatDialog
   ) {
     this.trendingResults =
-      this.paginatorService.paginationConfig
+      this.paginatorService.paginationConfigTrending
         .pipe(
           tap(() => this.isLoading = true),
           switchMap(({pageSize, offset}) => this.giphyService.getGifsTrending(pageSize, offset)),
@@ -38,7 +44,7 @@ export class AppComponent implements AfterViewInit {
 
     this.searchResults =
       combineLatest(
-        this.paginatorService.paginationConfig,
+        this.paginatorService.paginationConfigSearch,
         this.giphyService.search$
       ).pipe(
         tap(() => this.isLoadingSearch = true),
@@ -61,15 +67,28 @@ export class AppComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    if (!!this.paginator) {
-      this.paginatorService.setPaginatorInstance(this.paginator)
+    this.paginatorService.setPaginatorInstance(this.paginatorTrending, this.paginationOption.TRENDING)
+    this.paginatorService.setPaginatorInstance(this.paginatorSearch, this.paginationOption.SEARCH)
+    this.paginatorService.setTabGroup(this.tabGroup)
+  }
+
+  public selectPage(event: PageEvent, instanceName: string) {
+    if (instanceName === this.paginationOption.SEARCH) {
+      this.paginatorService.paginationConfigSearch.next({
+        pageSize: event.pageSize,
+        offset: event.pageIndex * event.pageSize
+      })
+    }
+
+    if (instanceName === this.paginationOption.TRENDING) {
+      this.paginatorService.paginationConfigTrending.next({
+        pageSize: event.pageSize,
+        offset: event.pageIndex * event.pageSize
+      })
     }
   }
 
-  public selectPage(event: PageEvent) {
-    this.paginatorService.paginationConfig.next({
-      pageSize: event.pageSize,
-      offset: event.pageIndex * event.pageSize
-    })
+  changeTab(event: number) {
+    this.paginatorService.currentTab$.next(event)
   }
 }

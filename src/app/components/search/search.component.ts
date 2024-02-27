@@ -3,7 +3,7 @@ import { FormControl } from "@angular/forms";
 import { GiphyService } from "../../services/giphy.service";
 import { debounceTime, Observable, of, switchMap } from "rxjs";
 import { MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from "@angular/material/autocomplete";
-import { IAutocompleteResponse } from "../../models/models";
+import {IAutocompleteResponse, PaginatorEnum} from "../../models/models";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { PaginatorService } from "../../services/paginator.service";
 
@@ -15,7 +15,7 @@ import { PaginatorService } from "../../services/paginator.service";
 })
 export class SearchComponent {
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger?: MatAutocompleteTrigger;
-
+  public paginationOption = PaginatorEnum
   public searchControl = new FormControl('');
   public filteredOpt: Observable<IAutocompleteResponse[]>
 
@@ -47,18 +47,15 @@ export class SearchComponent {
       this._snackBar.open('The input line cannot be empty', 'OK')
       return
     }
-    this._paginatorService.paginationConfig.next({
-      offset: 0,
-      pageSize: this._paginatorService.paginationConfig.getValue().pageSize
-    })
     this.giphyService.search$.next(this.searchControl.value)
-    this._paginatorService.resetPaginatorIndex()
+    this._paginatorService.currentTab$.next(1)
     this.autocompleteTrigger?.closePanel()
   }
 
   public resetSearch() {
+    this._paginatorService.currentTab$.next(0)
     this.searchControl.reset()
-    this._paginatorService.resetPaginatorIndex()
+    this._paginatorService.resetPaginatorIndex(this.paginationOption.SEARCH)
     this.giphyService.search$.next(this.searchControl.value)
   }
 }

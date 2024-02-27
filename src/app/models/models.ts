@@ -23,3 +23,8 @@ export interface IGifsResponse {
 export interface IAutocompleteResponse {
   name: string
 }
+
+export enum PaginatorEnum {
+  TRENDING = 'TRENDING',
+  SEARCH = 'SEARCH'
+}

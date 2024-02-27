@@ -3,22 +3,17 @@
   <agilie-search></agilie-search>
 
   <div class="images__container-result">
-
-    <div class="images__pagination">
-      <mat-paginator
-        [length]="giphyService.length.getValue()"
-        [pageSize]="paginatorService.paginationConfig.getValue().pageSize"
-        [pageSizeOptions]="[10, 25, 50]"
-        (page)="selectPage($event)"
-        aria-label="Select page">
-      </mat-paginator>
-    </div>
-
     <ng-container *ngIf="isLoadingSearch">
       <mat-progress-bar mode="indeterminate"></mat-progress-bar>
     </ng-container>
 
-      <ng-container *ngIf="!giphyService.search$.getValue()">
+    <mat-tab-group
+      dynamicHeight
+      #tabGroup
+      [selectedIndex]="paginatorService.currentTab$ | async"
+      (selectedIndexChange)="changeTab($event)"
+    >
+      <mat-tab label="Trending" >
         <ul class="images__list">
           <li class="images__list-item"
               *ngFor="let item of trendingResults | async">
@@ -33,24 +28,43 @@
             ></agilie-card>
           </li>
         </ul>
-      </ng-container>
+        <mat-paginator
+          #paginatorTrending
+          [length]="giphyService.lengthTrending | async"
+          [pageSize]="(paginatorService.paginationConfigTrending | async)!.pageSize"
+          [pageSizeOptions]="[10, 25, 50]"
+          (page)="selectPage($event, paginationOption.TRENDING)"
+          aria-label="Select page">
+        </mat-paginator>
+      </mat-tab>
 
-      <ng-container *ngIf="!!giphyService.search$.getValue()">
-          <ul class="images__list">
-            <li class="images__list-item"
-                *ngFor="let item of searchResults | async">
-              <agilie-card
-                [cardInfo]="{
+
+      <mat-tab label="Search" [disabled]="!(giphyService.search$ | async)">
+        <ul class="images__list">
+          <li class="images__list-item"
+              *ngFor="let item of searchResults | async">
+            <agilie-card
+              [cardInfo]="{
                   title:item.title,
                   username: item.user?.username,
                   postDate: item.import_datetime,
                   srcImg: item.images.fixed_width.url
                 }"
-                [isLoading]="isLoadingSearch"
-              ></agilie-card>
-            </li>
-          </ul>
-        </ng-container>
+              [isLoading]="isLoadingSearch"
+            ></agilie-card>
+          </li>
+        </ul>
+        <mat-paginator
+          #paginatorSearch
+          [length]="giphyService.lengthSearch | async"
+          [pageSize]="(paginatorService.paginationConfigSearch | async)!.pageSize"
+          [pageSizeOptions]="[10, 25, 50]"
+          (page)="selectPage($event, paginationOption.SEARCH)"
+          aria-label="Select page">
+        </mat-paginator>
+      </mat-tab>
+    </mat-tab-group>
+
 
   </div>
 </div>

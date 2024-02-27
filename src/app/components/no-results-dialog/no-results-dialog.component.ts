@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { scan, takeWhile, timer } from "rxjs";
 import { MatDialogRef } from "@angular/material/dialog";
+import {PaginatorService} from "../../services/paginator.service";
 
 @Component({
   selector: 'agilie-no-results-dialog',
@@ -19,10 +20,12 @@ export class NoResultsDialogComponent {
   );
 
   constructor(
-    public dialogRef: MatDialogRef<NoResultsDialogComponent>
+    public dialogRef: MatDialogRef<NoResultsDialogComponent>,
+    private _paginatorService: PaginatorService
   ) {}
 
   public closeDialog() {
+    this._paginatorService.currentTab$.next(0)
     this.dialogRef.close()
   }
 }

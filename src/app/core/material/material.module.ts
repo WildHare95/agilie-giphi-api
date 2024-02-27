@@ -11,6 +11,7 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatSliderModule } from "@angular/material/slider";
 import {MatDialog, MatDialogModule} from "@angular/material/dialog";
+import {MatTabsModule} from "@angular/material/tabs";
 
 
 
@@ -27,7 +28,8 @@ import {MatDialog, MatDialogModule} from "@angular/material/dialog";
     MatProgressBarModule,
     MatProgressSpinnerModule,
     MatSliderModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTabsModule,
   ],
   exports: [
     MatPaginatorModule,
@@ -39,7 +41,8 @@ import {MatDialog, MatDialogModule} from "@angular/material/dialog";
     MatProgressBarModule,
     MatProgressSpinnerModule,
     MatSliderModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTabsModule,
   ],
   providers: [MatSnackBar]
 })

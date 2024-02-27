@@ -10,6 +10,7 @@ import { CardComponent } from './components/card/card.component';
 import { ReactiveFormsModule } from "@angular/forms";
 import { SearchComponent } from './components/search/search.component';
 import { NoResultsDialogComponent } from './components/no-results-dialog/no-results-dialog.component';
+import {MatTabsModule} from "@angular/material/tabs";
 
 @NgModule({
   declarations: [
@@ -18,14 +19,14 @@ import { NoResultsDialogComponent } from './components/no-results-dialog/no-resu
     SearchComponent,
     NoResultsDialogComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        MaterialModule,
-        ReactiveFormsModule,
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MaterialModule,
+    ReactiveFormsModule,
+  ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

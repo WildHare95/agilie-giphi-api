@@ -12,7 +12,8 @@ export class GiphyService {
   constructor(private _http: HttpClient) {}
 
   public search$ = new BehaviorSubject<string | null>('');
-  public length = new BehaviorSubject(0)
+  public lengthTrending = new BehaviorSubject(0)
+  public lengthSearch = new BehaviorSubject(0)
 
   public getGifsTrending(limit: number = 10, offset: number = 0): Observable<IGifsResponse[]> {
     return this._http
@@ -22,7 +23,7 @@ export class GiphyService {
           .set('offset', offset)
       })
       .pipe(
-        tap(response => this.length.next(response.pagination.total_count)),
+        tap(response => this.lengthTrending.next(response.pagination.total_count)),
         map(response => response.data)
       )
   }
@@ -42,7 +43,7 @@ export class GiphyService {
         .set('limit', limit)
         .set('offset', offset)
     }).pipe(
-        tap(response => this.length.next(response.pagination.total_count)),
+        tap(response => this.lengthSearch.next(response.pagination.total_count)),
         map(response => response.data)
       )
   }
